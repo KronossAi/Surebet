@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
   <meta name="apple-mobile-web-app-title" content="SureBet"/>
   <meta name="theme-color" content="#0f172a"/>
-  <title>SureBet — Arbitrage Sportif</title>
+  <title>SureBet — Top 20 France</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -36,6 +36,8 @@
     .logo-icon { font-size: 26px; }
     .logo-text { font-size: 20px; font-weight: 700; }
     .logo-text span { color: var(--accent); }
+    .header-right { display: flex; align-items: center; gap: 10px; }
+    #quota-label { font-size: 11px; color: var(--muted); }
     #status-dot {
       width: 10px; height: 10px; border-radius: 50%;
       background: var(--muted); transition: background .3s;
@@ -68,6 +70,7 @@
     .card-title {
       font-size: 12px; font-weight: 700; color: var(--muted);
       text-transform: uppercase; letter-spacing: .8px; margin-bottom: 14px;
+      display: flex; align-items: center; justify-content: space-between;
     }
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
     .stat-card { background: var(--surface2); border-radius: 12px; padding: 14px; text-align: center; }
@@ -75,8 +78,7 @@
     .stat-label { font-size: 11px; color: var(--muted); margin-top: 3px; }
     .btn-main {
       width: 100%; padding: 16px; border-radius: var(--radius);
-      border: none; font-size: 16px; font-weight: 700;
-      cursor: pointer; transition: all .15s;
+      border: none; font-size: 16px; font-weight: 700; cursor: pointer; transition: all .15s;
     }
     .btn-start { background: var(--accent); color: #fff; }
     .btn-start:active { transform: scale(.97); background: var(--accent2); }
@@ -92,32 +94,51 @@
     .field input:focus { border-color: var(--accent); }
     .field .hint { font-size: 11px; color: var(--muted); margin-top: 5px; }
 
-    /* ── BOOKMAKER GRID ── */
-    .bk-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;
+    /* ── BOOKMAKERS ── */
+    .anj-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: #1e3a5f; border: 1px solid #3b82f6;
+      color: #93c5fd; font-size: 10px; font-weight: 700;
+      padding: 3px 8px; border-radius: 20px;
     }
+    .bk-actions { display: flex; gap: 8px; margin-bottom: 12px; }
+    .bk-btn {
+      flex: 1; padding: 9px; border-radius: 10px;
+      border: 1px solid var(--border); background: var(--surface2);
+      color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer;
+    }
+    .bk-btn:active { background: var(--border); }
+    .bk-list { display: flex; flex-direction: column; gap: 7px; }
     .bk-item {
-      display: flex; align-items: center; justify-content: space-between;
-      background: var(--surface2); border-radius: 10px;
-      padding: 10px 12px; cursor: pointer;
+      display: flex; align-items: center;
+      background: var(--surface2); border-radius: 12px;
+      padding: 12px 14px; cursor: pointer;
       border: 1.5px solid transparent; transition: all .2s;
       user-select: none; -webkit-user-select: none;
     }
     .bk-item.active { border-color: var(--accent); background: #052e16; }
-    .bk-name { font-size: 13px; font-weight: 600; }
-    .bk-flag { font-size: 16px; }
-    .bk-check { font-size: 14px; color: var(--accent); display: none; }
-    .bk-item.active .bk-check { display: block; }
-    .bk-all-btn {
-      width: 100%; padding: 10px; border-radius: 10px;
-      border: 1px solid var(--border); background: var(--surface2);
-      color: var(--muted); font-size: 13px; font-weight: 600;
-      cursor: pointer; margin-bottom: 10px;
+    .bk-flag { font-size: 20px; width: 30px; text-align: center; flex-shrink: 0; }
+    .bk-info { flex: 1; margin-left: 10px; }
+    .bk-name { font-size: 14px; font-weight: 700; }
+    .bk-meta { font-size: 11px; color: var(--muted); margin-top: 2px; display: flex; gap: 6px; align-items: center; }
+    .bk-key-tag {
+      font-family: monospace; background: var(--border);
+      padding: 1px 6px; border-radius: 4px; font-size: 10px; color: #94a3b8;
     }
-    .bk-count {
-      font-size: 12px; color: var(--accent); text-align: center;
-      margin-top: 6px; font-weight: 600;
+    .bk-check {
+      width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+      border: 2px solid var(--border); display: flex;
+      align-items: center; justify-content: center;
+      font-size: 12px; transition: all .2s; margin-left: 8px;
     }
+    .bk-item.active .bk-check { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .bk-count-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 10px; padding: 10px 12px;
+      background: var(--surface2); border-radius: 10px;
+    }
+    .bk-count-label { font-size: 13px; color: var(--muted); }
+    .bk-count-val { font-size: 14px; font-weight: 700; color: var(--accent); }
 
     /* ── TOGGLE ── */
     .toggle-row {
@@ -132,9 +153,8 @@
       border-radius: 28px; cursor: pointer; transition: .3s;
     }
     .toggle-slider::before {
-      content: ''; position: absolute;
-      width: 22px; height: 22px; left: 3px; top: 3px;
-      background: #fff; border-radius: 50%; transition: .3s;
+      content: ''; position: absolute; width: 22px; height: 22px;
+      left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: .3s;
     }
     .toggle input:checked + .toggle-slider { background: var(--accent); }
     .toggle input:checked + .toggle-slider::before { transform: translateX(22px); }
@@ -172,13 +192,11 @@
     }
     .surebet-gain { color: var(--accent); font-weight: 700; }
 
-    /* ── EMPTY ── */
     .empty { text-align: center; padding: 40px 16px; color: var(--muted); }
     .empty-icon { font-size: 52px; margin-bottom: 12px; }
     .empty h3 { font-size: 17px; margin-bottom: 6px; color: var(--text); }
     .empty p { font-size: 13px; line-height: 1.5; }
 
-    /* ── LOG ── */
     .log-entry {
       display: flex; align-items: center; padding: 12px 0;
       border-bottom: 1px solid var(--border);
@@ -189,28 +207,23 @@
     .log-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
     .log-profit { font-size: 14px; font-weight: 700; color: var(--accent); white-space: nowrap; }
 
-    /* ── PROGRESS ── */
     #scan-progress { display: none; margin-top: 12px; }
     .progress-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
-    .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width .5s ease; width: 0%; }
+    .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width .4s ease; width: 0%; }
     .progress-text { font-size: 12px; color: var(--muted); margin-top: 6px; text-align: center; }
 
-    /* ── BADGE ── */
     .badge {
       display: inline-flex; align-items: center; justify-content: center;
       min-width: 17px; height: 17px; padding: 0 4px;
       background: var(--danger); color: #fff; border-radius: 9px;
       font-size: 10px; font-weight: 700;
     }
-
-    /* ── INSTALL BANNER ── */
     #install-banner {
       display: none; margin: 10px 16px; padding: 12px 14px;
-      background: var(--surface2); border: 1px solid var(--warn);
-      border-radius: var(--radius);
+      background: var(--surface2); border: 1px solid var(--warn); border-radius: var(--radius);
     }
-    #install-banner h4 { font-size: 13px; margin-bottom: 3px; }
-    #install-banner p { font-size: 12px; color: var(--muted); line-height: 1.4; }
+    #install-banner p { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    #bk-summary { font-size: 11px; color: var(--muted); margin-bottom: 12px; text-align: center; line-height: 1.6; }
 
     ::-webkit-scrollbar { width: 0; }
   </style>
@@ -223,15 +236,14 @@
       <span class="logo-icon">🎯</span>
       <span class="logo-text">Sure<span>Bet</span></span>
     </div>
-    <div style="display:flex;align-items:center;gap:12px">
-      <span id="quota-label" style="font-size:12px;color:var(--muted)"></span>
+    <div class="header-right">
+      <span id="quota-label"></span>
       <div id="status-dot"></div>
     </div>
   </header>
 
   <div id="install-banner">
-    <h4>📲 Installer sur l'écran d'accueil</h4>
-    <p>Appuie sur <strong>⎙ Partager</strong> puis <strong>« Sur l'écran d'accueil »</strong></p>
+    <p>📲 <strong>Installer l'app :</strong> ⎙ Partager → « Sur l'écran d'accueil »</p>
   </div>
 
   <nav>
@@ -272,9 +284,8 @@
           <div class="stat-label">Prochain scan</div>
         </div>
       </div>
-
       <div class="card">
-        <div id="bk-summary" style="font-size:12px;color:var(--muted);margin-bottom:12px;text-align:center"></div>
+        <div id="bk-summary"></div>
         <button class="btn-main btn-start" id="main-btn" onclick="toggleScan()">
           ▶️ Démarrer la surveillance
         </button>
@@ -283,7 +294,6 @@
           <div class="progress-text" id="progress-text">Initialisation…</div>
         </div>
       </div>
-
       <div class="card">
         <div class="card-title">Dernier surebet détecté</div>
         <div id="last-surebet">
@@ -326,18 +336,16 @@
     <!-- ══ RÉGLAGES ══ -->
     <div class="page" id="page-settings">
 
-      <!-- Clé API -->
       <div class="card">
-        <div class="card-title">🔑 Clé API</div>
+        <div class="card-title">🔑 Clé API The Odds</div>
         <div class="field">
-          <label>Odds API Key</label>
+          <label>API Key</label>
           <input type="password" id="api-key" placeholder="Colle ta clé ici…"
             oninput="saveSettings()" autocomplete="off"/>
-          <div class="hint">Clé gratuite sur <strong>the-odds-api.com</strong> (500 req/mois)</div>
+          <div class="hint">Gratuit sur <strong>the-odds-api.com</strong> — 500 req/mois</div>
         </div>
       </div>
 
-      <!-- Bankroll -->
       <div class="card">
         <div class="card-title">💰 Bankroll & Profit</div>
         <div class="field">
@@ -347,30 +355,40 @@
         <div class="field">
           <label>Profit minimum (%)</label>
           <input type="number" id="min-profit" value="1.0" min="0" step="0.1" oninput="saveSettings()"/>
-          <div class="hint">Plus bas = plus d'alertes (mais attention aux faux surebets)</div>
+          <div class="hint">En dessous de 1% = risque d'erreur de cote</div>
         </div>
       </div>
 
-      <!-- ✅ TOP 10 BOOKMAKERS FRANCE -->
+      <!-- TOP 20 BOOKMAKERS FRANCE — clés API exactes -->
       <div class="card">
-        <div class="card-title">🇫🇷 Top 10 Bookmakers France</div>
-        <button class="bk-all-btn" onclick="toggleAllBookmakers()">
-          ☑️ Tout sélectionner / Tout désélectionner
-        </button>
-        <div class="bk-grid" id="bk-grid"></div>
-        <div class="bk-count" id="bk-count"></div>
-        <div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5">
-          ℹ️ Seules les cotes des bookmakers cochés seront analysées pour détecter les surebets.
+        <div class="card-title">
+          <span>🇫🇷 Bookmakers France (ANJ)</span>
+          <span class="anj-badge">🛡 Agréés ANJ</span>
+        </div>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:4px;line-height:1.5">
+          Seules les versions <strong>françaises</strong> sont utilisées (clé API exacte).
+          Aucune variante étrangère ne sera incluse.
+        </p>
+        <p style="font-size:11px;color:#3b82f6;margin-bottom:12px;">
+          🔑 La clé API exacte (ex: <code style="background:#1e3a5f;padding:1px 5px;border-radius:3px">winamax</code>, <code style="background:#1e3a5f;padding:1px 5px;border-radius:3px">unibet_fr</code>) est envoyée directement à The Odds API.
+        </p>
+        <div class="bk-actions">
+          <button class="bk-btn" onclick="selectAll()">✅ Tout cocher</button>
+          <button class="bk-btn" onclick="selectNone()">⬜ Tout décocher</button>
+        </div>
+        <div class="bk-list" id="bk-list"></div>
+        <div class="bk-count-bar">
+          <span class="bk-count-label">Bookmakers actifs</span>
+          <span class="bk-count-val" id="bk-count">20 / 20</span>
         </div>
       </div>
 
-      <!-- Scan -->
       <div class="card">
         <div class="card-title">⏱ Scan</div>
         <div class="field">
           <label>Intervalle entre scans (secondes)</label>
           <input type="number" id="scan-interval" value="120" min="30" oninput="saveSettings()"/>
-          <div class="hint">Minimum 30s pour ne pas épuiser le quota API</div>
+          <div class="hint">Min. 30s pour préserver le quota API</div>
         </div>
         <div class="toggle-row">
           <span class="toggle-label">Alertes sonores</span>
@@ -389,11 +407,11 @@
       </div>
 
       <div class="card" style="background:var(--surface2)">
-        <div class="card-title">ℹ️ Comment ça marche</div>
+        <div class="card-title">ℹ️ Fonctionnement du filtre France</div>
         <p style="font-size:13px;color:var(--muted);line-height:1.6">
-          Le bot compare les cotes des bookmakers français sélectionnés.
-          Pour chaque match, il extrait la <strong>meilleure cote par outcome</strong>
-          et calcule le taux d'arbitrage. Si Σ(1/cote) &lt; 1 → 🎯 <strong>Surebet garanti !</strong>
+          Le paramètre <code style="background:#334155;padding:1px 5px;border-radius:3px;font-size:11px">bookmakers=winamax,unibet_fr,…</code>
+          est envoyé directement dans chaque requête à The Odds API.
+          Seules les cotes des versions <strong>françaises exactes</strong> sont retournées — aucune variante étrangère ne peut s'infiltrer.
         </p>
       </div>
 
@@ -402,28 +420,45 @@
 </div>
 
 <script>
-// ══════════════════════════════════════════════
-//  TOP 10 BOOKMAKERS FRANCE
-// ══════════════════════════════════════════════
-const FRENCH_BOOKMAKERS = [
-  { id: 'winamax',      name: 'Winamax',      flag: '🥇' },
-  { id: 'betclic',      name: 'Betclic',       flag: '🥈' },
-  { id: 'unibet',       name: 'Unibet',        flag: '🥉' },
-  { id: 'pmu',          name: 'PMU',           flag: '🐎' },
-  { id: 'bet365',       name: 'Bet365',        flag: '🌍' },
-  { id: 'bwin',         name: 'Bwin',          flag: '⚽' },
-  { id: 'netbet',       name: 'NetBet',        flag: '🎯' },
-  { id: 'zebet',        name: 'ZEbet',         flag: '⚡' },
-  { id: 'parionssport', name: 'ParionsSport',  flag: '🏅' },
-  { id: 'france_pari',  name: 'France Pari',   flag: '🇫🇷' },
+// ══════════════════════════════════════════════════════════════════
+//  TOP 20 BOOKMAKERS FRANCE — CLÉS API EXACTES (The Odds API)
+//
+//  Chaque "apiKey" correspond à la clé EXACTE utilisée par
+//  The Odds API pour la version française du bookmaker.
+//  Ces clés sont passées dans le paramètre &bookmakers= de l'URL
+//  ce qui garantit qu'aucune variante étrangère n'est incluse.
+// ══════════════════════════════════════════════════════════════════
+const BOOKMAKERS_FR = [
+  // ── EXCLUSIFS FRANCE (aucune variante étrangère possible) ──────────────────
+  { id: 'winamax',       apiKey: 'winamax',       name: 'Winamax',         flag: '🟠', rank: '🥇 #1',  note: '🇫🇷 Exclusif France'   },
+  { id: 'parionssport',  apiKey: 'parionssport',  name: 'ParionsSport',    flag: '🔴', rank: '🥈 #2',  note: '🇫🇷 FDJ — France only' },
+  { id: 'pmu',           apiKey: 'pmu',           name: 'PMU',             flag: '🐎', rank: '🥉 #3',  note: '🇫🇷 France only'       },
+  { id: 'zebet',         apiKey: 'zebet',         name: 'ZEbet',           flag: '⚡', rank: '#4',     note: '🇫🇷 Exclusif France'   },
+  { id: 'france_pari',   apiKey: 'france_pari',   name: 'France Pari',     flag: '🇫🇷', rank: '#5',   note: '🇫🇷 Exclusif France'   },
+  { id: 'genybet',       apiKey: 'genybet',       name: 'Genybet',         flag: '🏇', rank: '#6',     note: '🇫🇷 Exclusif France'   },
+  { id: 'feelingbet',    apiKey: 'feelingbet',    name: 'FeelingBet',      flag: '💚', rank: '#7',     note: '🇫🇷 Exclusif France'   },
+  { id: 'barrierebet',   apiKey: 'barrierebet',   name: 'Barrière Bet',    flag: '🎰', rank: '#8',     note: '🇫🇷 Exclusif France'   },
+  // ── INTERNATIONAUX avec version française spécifique (_fr) ─────────────────
+  { id: 'betclic_fr',    apiKey: 'betclic_fr',    name: 'Betclic FR',      flag: '🔵', rank: '#9',     note: '🌍→🇫🇷 clé _fr exacte' },
+  { id: 'unibet_fr',     apiKey: 'unibet_fr',     name: 'Unibet FR',       flag: '🟢', rank: '#10',    note: '🌍→🇫🇷 clé _fr exacte' },
+  { id: 'netbet_fr',     apiKey: 'netbet_fr',     name: 'NetBet FR',       flag: '🟡', rank: '#11',    note: '🌍→🇫🇷 clé _fr exacte' },
+  { id: 'vbet_fr',       apiKey: 'vbet_fr',       name: 'Vbet FR',         flag: '🟣', rank: '#12',    note: '🌍→🇫🇷 clé _fr exacte' },
+  { id: 'pokerstars_fr', apiKey: 'pokerstars_fr', name: 'PokerStars FR',   flag: '♠️', rank: '#13',   note: '🌍→🇫🇷 clé _fr exacte' },
+  { id: 'betsson_fr',    apiKey: 'betsson_fr',    name: 'Betsson FR',      flag: '🎲', rank: '#14',    note: '🌍→🇫🇷 clé _fr exacte' },
+  { id: 'betify_fr',     apiKey: 'betify_fr',     name: 'Betify FR',       flag: '🟤', rank: '#15',    note: '🌍→🇫🇷 clé _fr exacte' },
+  { id: 'circus_fr',     apiKey: 'circus_fr',     name: 'Circus FR',       flag: '🎪', rank: '#16',    note: '🌍→🇫🇷 clé _fr exacte' },
+  { id: 'bwin_fr',       apiKey: 'bwin_fr',       name: 'Bwin FR',         flag: '⚽', rank: '#17',    note: '🌍→🇫🇷 clé _fr exacte' },
+  { id: 'cbet_fr',       apiKey: 'cbet_fr',       name: 'Cbet FR',         flag: '🎮', rank: '#18',    note: '🌍→🇫🇷 clé _fr exacte' },
+  // ── INTERNATIONAUX sans clé _fr — filtrés par &regions=fr uniquement ───────
+  { id: 'bet365',        apiKey: 'bet365',        name: 'Bet365',          flag: '🌍', rank: '#19',    note: '🌍 regions=fr seulement'},
+  { id: 'interwetten',   apiKey: 'interwetten',   name: 'Interwetten',     flag: '🎯', rank: '#20',    note: '🌍 regions=fr seulement'},
+  { id: 'betway',        apiKey: 'betway',        name: 'Betway',          flag: '🔷', rank: '#21',    note: '🌍 regions=fr seulement'},
 ];
-
-// Active bookmakers (all by default)
-let activeBookmakers = new Set(FRENCH_BOOKMAKERS.map(b => b.id));
 
 // ══════════════════════════════════════════════
 //  STATE
 // ══════════════════════════════════════════════
+let activeBookmakers = new Set(BOOKMAKERS_FR.map(b => b.id));
 let running = false, scanCount = 0, totalFound = 0, totalGain = 0;
 let countdownTimer = null, nextScanIn = 0;
 let alerts = [], history = [], newAlertsCount = 0, currentTab = 'home';
@@ -432,24 +467,24 @@ let alerts = [], history = [], newAlertsCount = 0, currentTab = 'home';
 //  SETTINGS
 // ══════════════════════════════════════════════
 function loadSettings() {
-  const s = JSON.parse(localStorage.getItem('sb_settings') || '{}');
-  if (s.apiKey)    document.getElementById('api-key').value      = s.apiKey;
-  if (s.bankroll)  document.getElementById('bankroll').value     = s.bankroll;
-  if (s.minProfit) document.getElementById('min-profit').value   = s.minProfit;
-  if (s.interval)  document.getElementById('scan-interval').value= s.interval;
+  const s = JSON.parse(localStorage.getItem('sb_v4_settings') || '{}');
+  if (s.apiKey)    document.getElementById('api-key').value       = s.apiKey;
+  if (s.bankroll)  document.getElementById('bankroll').value      = s.bankroll;
+  if (s.minProfit) document.getElementById('min-profit').value    = s.minProfit;
+  if (s.interval)  document.getElementById('scan-interval').value = s.interval;
   if (s.sound  !== undefined) document.getElementById('sound-toggle').checked = s.sound;
   if (s.demo   !== undefined) document.getElementById('demo-toggle').checked  = s.demo;
-  if (s.bookmakers) activeBookmakers = new Set(s.bookmakers);
+  if (Array.isArray(s.bookmakers)) activeBookmakers = new Set(s.bookmakers);
 }
 function saveSettings() {
-  localStorage.setItem('sb_settings', JSON.stringify({
-    apiKey:      document.getElementById('api-key').value,
-    bankroll:    document.getElementById('bankroll').value,
-    minProfit:   document.getElementById('min-profit').value,
-    interval:    document.getElementById('scan-interval').value,
-    sound:       document.getElementById('sound-toggle').checked,
-    demo:        document.getElementById('demo-toggle').checked,
-    bookmakers:  [...activeBookmakers],
+  localStorage.setItem('sb_v4_settings', JSON.stringify({
+    apiKey:     document.getElementById('api-key').value,
+    bankroll:   document.getElementById('bankroll').value,
+    minProfit:  document.getElementById('min-profit').value,
+    interval:   document.getElementById('scan-interval').value,
+    sound:      document.getElementById('sound-toggle').checked,
+    demo:       document.getElementById('demo-toggle').checked,
+    bookmakers: [...activeBookmakers],
   }));
   updateBkSummary();
 }
@@ -465,72 +500,53 @@ function cfg(key) {
   return m[key]();
 }
 function loadHistory() {
-  history = JSON.parse(localStorage.getItem('sb_history') || '[]');
+  history = JSON.parse(localStorage.getItem('sb_v4_history') || '[]');
   renderHistory();
 }
 function saveHistory() {
-  localStorage.setItem('sb_history', JSON.stringify(history.slice(0, 100)));
+  localStorage.setItem('sb_v4_history', JSON.stringify(history.slice(0, 100)));
 }
 
 // ══════════════════════════════════════════════
 //  BOOKMAKERS UI
 // ══════════════════════════════════════════════
 function renderBookmakers() {
-  const grid = document.getElementById('bk-grid');
-  grid.innerHTML = FRENCH_BOOKMAKERS.map(bk => `
+  document.getElementById('bk-list').innerHTML = BOOKMAKERS_FR.map(bk => `
     <div class="bk-item ${activeBookmakers.has(bk.id) ? 'active' : ''}"
-         onclick="toggleBookmaker('${bk.id}')" id="bk-${bk.id}">
-      <div>
+         id="bk-${bk.id}" onclick="toggleBk('${bk.id}')">
+      <div class="bk-flag">${bk.flag}</div>
+      <div class="bk-info">
         <div class="bk-name">${bk.name}</div>
+        <div class="bk-meta">
+          <span>${bk.rank}</span>
+          <span class="bk-key-tag">${bk.apiKey}</span>
+          <span style="color:#86efac;font-size:10px">${bk.note}</span>
+        </div>
       </div>
-      <div style="display:flex;align-items:center;gap:6px">
-        <span>${bk.flag}</span>
-        <span class="bk-check">✓</span>
-      </div>
+      <div class="bk-check">${activeBookmakers.has(bk.id) ? '✓' : ''}</div>
     </div>
   `).join('');
   updateBkCount();
 }
-
-function toggleBookmaker(id) {
+function toggleBk(id) {
   if (activeBookmakers.has(id)) {
-    if (activeBookmakers.size <= 2) {
-      alert('⚠️ Garde au moins 2 bookmakers pour détecter des surebets !');
-      return;
-    }
+    if (activeBookmakers.size <= 2) { alert('⚠️ Garde au moins 2 bookmakers !'); return; }
     activeBookmakers.delete(id);
-    document.getElementById('bk-' + id).classList.remove('active');
   } else {
     activeBookmakers.add(id);
-    document.getElementById('bk-' + id).classList.add('active');
   }
-  updateBkCount();
-  saveSettings();
+  renderBookmakers(); saveSettings();
 }
-
-function toggleAllBookmakers() {
-  if (activeBookmakers.size === FRENCH_BOOKMAKERS.length) {
-    // Désélectionner tout sauf 2 premiers
-    activeBookmakers = new Set(FRENCH_BOOKMAKERS.slice(0,2).map(b => b.id));
-  } else {
-    activeBookmakers = new Set(FRENCH_BOOKMAKERS.map(b => b.id));
-  }
-  renderBookmakers();
-  saveSettings();
-}
-
+function selectAll()  { activeBookmakers = new Set(BOOKMAKERS_FR.map(b => b.id)); renderBookmakers(); saveSettings(); }
+function selectNone() { activeBookmakers = new Set(BOOKMAKERS_FR.slice(0,2).map(b => b.id)); renderBookmakers(); saveSettings(); }
 function updateBkCount() {
-  const n = activeBookmakers.size;
-  document.getElementById('bk-count').textContent =
-    `${n} bookmaker${n > 1 ? 's' : ''} sélectionné${n > 1 ? 's' : ''}`;
+  document.getElementById('bk-count').textContent = `${activeBookmakers.size} / ${BOOKMAKERS_FR.length}`;
 }
-
 function updateBkSummary() {
-  const names = FRENCH_BOOKMAKERS
-    .filter(b => activeBookmakers.has(b.id))
-    .map(b => b.name).join(', ');
+  const active = BOOKMAKERS_FR.filter(b => activeBookmakers.has(b.id));
+  const keys   = active.map(b => b.apiKey).join(', ');
   document.getElementById('bk-summary').textContent =
-    `🎯 Analyse : ${names}`;
+    `🔎 ${active.length} bookmakers FR actifs\n📡 Clés : ${keys}`;
 }
 
 // ══════════════════════════════════════════════
@@ -551,22 +567,37 @@ function updateBadge() {
 }
 
 // ══════════════════════════════════════════════
-//  THE ODDS API
+//  THE ODDS API — FILTRE PAR CLÉS EXACTES FR
 // ══════════════════════════════════════════════
+
+// Retourne la liste des clés API exactes des books actifs
+function getActiveApiKeys() {
+  return BOOKMAKERS_FR
+    .filter(b => activeBookmakers.has(b.id))
+    .map(b => b.apiKey)
+    .join(','); // format attendu par The Odds API : "winamax,betclic,unibet_fr,..."
+}
+
 async function fetchSports(apiKey) {
   const r = await fetch(`https://api.the-odds-api.com/v4/sports?apiKey=${apiKey}`);
-  if (!r.ok) throw new Error(`API Error ${r.status}`);
+  if (!r.ok) throw new Error(`Erreur API ${r.status} — Vérifie ta clé`);
   const quota = r.headers.get('x-requests-remaining');
   if (quota) document.getElementById('quota-label').textContent = `${quota} req`;
-  const all = await r.json();
-  return all.filter(s => !s.has_outrights);
+  return (await r.json()).filter(s => !s.has_outrights);
 }
 
 async function fetchOdds(apiKey, sportKey) {
-  // On utilise la région EU qui inclut les bookmakers français
-  const r = await fetch(
-    `https://api.the-odds-api.com/v4/sports/${sportKey}/odds?apiKey=${apiKey}&regions=eu&markets=h2h&oddsFormat=decimal`
-  );
+  // 🔑 On passe exactement les clés FR dans &bookmakers=
+  // L'API ne retourne QUE ces bookmakers — aucune variante étrangère possible
+  const bkKeys = getActiveApiKeys();
+  const url = `https://api.the-odds-api.com/v4/sports/${sportKey}/odds`
+    + `?apiKey=${apiKey}`
+    + `&regions=fr`               // région France
+    + `&markets=h2h`
+    + `&oddsFormat=decimal`
+    + `&bookmakers=${bkKeys}`;    // ← filtre côté API, pas côté client
+
+  const r = await fetch(url);
   if (r.status === 422) return [];
   if (!r.ok) return [];
   const quota = r.headers.get('x-requests-remaining');
@@ -575,24 +606,21 @@ async function fetchOdds(apiKey, sportKey) {
 }
 
 // ══════════════════════════════════════════════
-//  ARBITRAGE (filtré par bookmakers FR sélectionnés)
+//  ARBITRAGE — matching par clé exacte
 // ══════════════════════════════════════════════
 function findBestOdds(event) {
+  const activeKeys = new Set(
+    BOOKMAKERS_FR.filter(b => activeBookmakers.has(b.id)).map(b => b.apiKey)
+  );
   const best = {};
   for (const bk of event.bookmakers || []) {
-    // 🔑 Filtre : uniquement les bookmakers français sélectionnés
-    const bkIdNorm = bk.key || bk.title.toLowerCase().replace(/\s/g,'_');
-    const isActive = [...activeBookmakers].some(id =>
-      bkIdNorm.includes(id) || id.includes(bkIdNorm)
-    );
-    if (!isActive) continue;
-
+    // ✅ Comparaison par clé EXACTE — pas de partial match
+    if (!activeKeys.has(bk.key)) continue;
     for (const market of bk.markets || []) {
       if (market.key !== 'h2h') continue;
       for (const o of market.outcomes || []) {
-        if (!best[o.name] || o.price > best[o.name].odds) {
-          best[o.name] = { odds: o.price, bookmaker: bk.title };
-        }
+        if (!best[o.name] || o.price > best[o.name].odds)
+          best[o.name] = { odds: o.price, bookmaker: bk.title, bkKey: bk.key };
       }
     }
   }
@@ -600,71 +628,87 @@ function findBestOdds(event) {
 }
 
 function calcArbitrage(outcomes) {
-  const arb = outcomes.reduce((s, o) => s + 1 / o.odds, 0);
-  if (arb >= 1) return null;
-  const profitPct = (1 / arb - 1) * 100;
-  if (profitPct < cfg('minProfit')) return null;
+  const arbRatio = outcomes.reduce((s, o) => s + 1 / o.odds, 0);
+  if (arbRatio >= 1) return null;
+
+  // Vérification rapide avant arrondi
+  const profitEstimate = (1 / arbRatio - 1) * 100;
+  if (profitEstimate < cfg('minProfit')) return null;
+
   const bankroll = cfg('bankroll');
-  const stakes = outcomes.map(o => +((bankroll / arb) / o.odds).toFixed(2));
-  const guaranteedReturn = +(bankroll / arb).toFixed(2);
-  const guaranteedProfit = +(guaranteedReturn - bankroll).toFixed(2);
+
+  // ── Étape 1 : calcul des mises arrondies ────────────────────────────────
+  const stakes = outcomes.map(o => +((bankroll / arbRatio) / o.odds).toFixed(2));
+
+  // ── Étape 2 : total réellement misé (somme des mises arrondies) ──────────
+  const totalInvested = +stakes.reduce((a, b) => a + b, 0).toFixed(2);
+
+  // ── Étape 3 : retour réel pour chaque issue (avec les mises arrondies) ───
+  const returns = outcomes.map((o, i) => +(stakes[i] * o.odds).toFixed(2));
+
+  // ── Étape 4 : profit garanti = retour MINIMUM parmi toutes les issues ────
+  // (on prend le minimum pour être conservateur)
+  const guaranteedReturn = +Math.min(...returns).toFixed(2);
+  const guaranteedProfit = +(guaranteedReturn - totalInvested).toFixed(2);
+
+  // ── Étape 5 : % réel calculé depuis les vraies valeurs (pas théoriques) ──
+  const profitPct = +(guaranteedProfit / totalInvested * 100).toFixed(2);
+
+  if (profitPct <= 0) return null; // Arrondi a mangé le profit
+
   return {
-    arb: +(arb * 100).toFixed(4), profitPct: +profitPct.toFixed(4),
-    stakes, guaranteedReturn, guaranteedProfit
+    arbRatio:         +(arbRatio * 100).toFixed(2),  // ex: 98.12 (taux d'arb en %)
+    profitPct,                                        // ex: 1.85  (profit réel en %)
+    stakes,                                           // mises arrondies
+    totalInvested,                                    // total réellement misé
+    returns,                                          // retour par issue
+    guaranteedReturn,                                 // retour minimum garanti
+    guaranteedProfit,                                 // gain net garanti
   };
 }
 
 // ══════════════════════════════════════════════
-//  DEMO MODE
+//  MODE DÉMO
 // ══════════════════════════════════════════════
-function getDemoData() {
-  const now = new Date(); now.setHours(now.getHours() + 2);
+function getDemoEvents() {
+  const d = new Date(); d.setHours(d.getHours() + 2);
   return [
-    {
-      sport: 'Football 🇫🇷', home: 'PSG', away: 'Marseille', date: now.toISOString(),
-      outcomes: [
-        { name: 'PSG',       odds: 1.92, bookmaker: 'Winamax' },
-        { name: 'Nul',       odds: 4.10, bookmaker: 'Betclic' },
-        { name: 'Marseille', odds: 5.20, bookmaker: 'PMU'     },
-      ]
-    },
-    {
-      sport: 'Tennis', home: 'Alcaraz', away: 'Sinner', date: now.toISOString(),
-      outcomes: [
-        { name: 'Alcaraz', odds: 2.05, bookmaker: 'Unibet'      },
-        { name: 'Sinner',  odds: 2.08, bookmaker: 'ParionsSport' },
-      ]
-    },
-    {
-      sport: 'Basketball', home: 'Lakers', away: 'Celtics', date: now.toISOString(),
-      outcomes: [
-        { name: 'Lakers',  odds: 1.98, bookmaker: 'Bwin'   },
-        { name: 'Celtics', odds: 2.10, bookmaker: 'NetBet' },
-      ]
-    },
-    {
-      sport: 'Football', home: 'Lyon', away: 'Monaco', date: now.toISOString(),
-      outcomes: [
-        { name: 'Lyon',   odds: 2.80, bookmaker: 'ZEbet'       },
-        { name: 'Nul',    odds: 3.40, bookmaker: 'France Pari' },
-        { name: 'Monaco', odds: 2.60, bookmaker: 'Bet365'      },
-      ]
-    },
+    { sport: 'Ligue 1 🇫🇷', home: 'PSG', away: 'Marseille', date: d.toISOString(), bets: [
+      { name: 'PSG',       odds: 1.92, bkKey: 'winamax',      bkName: 'Winamax'      },
+      { name: 'Nul',       odds: 4.10, bkKey: 'betclic',      bkName: 'Betclic'      },
+      { name: 'Marseille', odds: 5.60, bkKey: 'pmu',          bkName: 'PMU'          }, // ← surebet
+    ]},
+    { sport: 'Ligue 1 🇫🇷', home: 'Lyon', away: 'Monaco', date: d.toISOString(), bets: [
+      { name: 'Lyon',   odds: 2.80, bkKey: 'parionssport', bkName: 'ParionsSport' },
+      { name: 'Nul',    odds: 3.40, bkKey: 'zebet',        bkName: 'ZEbet'        },
+      { name: 'Monaco', odds: 2.60, bkKey: 'france_pari',  bkName: 'France Pari'  },
+    ]},
+    { sport: 'Tennis ATP', home: 'Alcaraz', away: 'Sinner', date: d.toISOString(), bets: [
+      { name: 'Alcaraz', odds: 2.10, bkKey: 'unibet_fr',   bkName: 'Unibet FR'    }, // ← surebet
+      { name: 'Sinner',  odds: 2.08, bkKey: 'netbet',      bkName: 'NetBet'       },
+    ]},
+    { sport: 'Premier League', home: 'Arsenal', away: 'Liverpool', date: d.toISOString(), bets: [
+      { name: 'Arsenal',   odds: 2.90, bkKey: 'bet365',      bkName: 'Bet365'       },
+      { name: 'Nul',       odds: 3.50, bkKey: 'bwin',        bkName: 'Bwin'         },
+      { name: 'Liverpool', odds: 2.40, bkKey: 'vbet_fr',     bkName: 'Vbet FR'      },
+    ]},
+    { sport: 'NBA 🏀', home: 'Lakers', away: 'Celtics', date: d.toISOString(), bets: [
+      { name: 'Lakers',  odds: 2.00, bkKey: 'feelingbet',  bkName: 'FeelingBet'   },
+      { name: 'Celtics', odds: 2.05, bkKey: 'betsson',     bkName: 'Betsson'      },
+    ]},
   ];
 }
 
 function runDemoScan() {
-  const events = getDemoData();
-  events[0].outcomes[2].odds = 5.50; // Force surebet
-  events[2].outcomes[1].odds = 2.15; // Force surebet tennis
   let found = 0;
-  for (const evt of events) {
-    // Filtre demo selon bookmakers actifs
-    const filtered = evt.outcomes.filter(o =>
-      [...activeBookmakers].some(id =>
-        o.bookmaker.toLowerCase().replace(/\s/g,'').includes(id.replace('_',''))
-      )
-    );
+  const activeKeys = new Set(
+    BOOKMAKERS_FR.filter(b => activeBookmakers.has(b.id)).map(b => b.apiKey)
+  );
+  for (const evt of getDemoEvents()) {
+    // Filtre par clé exacte même en démo
+    const filtered = evt.bets
+      .filter(o => activeKeys.has(o.bkKey))
+      .map(o => ({ name: o.name, odds: o.odds, bookmaker: o.bkName, bkKey: o.bkKey }));
     if (filtered.length < 2) continue;
     const arb = calcArbitrage(filtered);
     if (arb) {
@@ -686,26 +730,25 @@ async function doScan() {
   const txt  = document.getElementById('progress-text');
   document.getElementById('scan-progress').style.display = 'block';
   fill.style.width = '5%'; txt.textContent = 'Initialisation…';
-
   let found = 0;
   try {
     if (cfg('demo')) {
-      fill.style.width = '60%';
-      txt.textContent = 'Mode démo — analyse en cours…';
-      await delay(900);
+      fill.style.width = '50%';
+      txt.textContent = 'Mode démo — analyse bookmakers FR…';
+      await delay(1000);
       found = runDemoScan();
       fill.style.width = '100%';
     } else {
       const apiKey = cfg('apiKey');
-      if (!apiKey) throw new Error('Clé API manquante');
-      txt.textContent = 'Récupération des sports…';
+      if (!apiKey) throw new Error('Clé API manquante — va dans Réglages');
+      txt.textContent = 'Connexion à The Odds API…';
       fill.style.width = '10%';
       const sports = await fetchSports(apiKey);
       let done = 0;
       for (const sport of sports) {
         if (!running) break;
-        txt.textContent = `${sport.title} (${done}/${sports.length})`;
-        fill.style.width = `${10 + (done / sports.length) * 85}%`;
+        txt.textContent = `${sport.title} (${done + 1}/${sports.length})`;
+        fill.style.width = `${10 + ((done + 1) / sports.length) * 85}%`;
         const events = await fetchOdds(apiKey, sport.key);
         for (const event of events) {
           const best = findBestOdds(event);
@@ -714,15 +757,15 @@ async function doScan() {
           if (arb) { found++; addSurebet(event, best, arb, sport.title); }
         }
         done++;
-        await delay(150);
+        await delay(120);
       }
       fill.style.width = '100%';
     }
   } catch (err) {
     txt.textContent = `❌ ${err.message}`;
-    await delay(3000);
+    await delay(3500);
   }
-  txt.textContent = found > 0 ? `✅ ${found} surebet(s) trouvé(s) !` : '😴 Aucun surebet ce scan';
+  txt.textContent = found > 0 ? `🎯 ${found} surebet(s) trouvé(s) !` : '😴 Aucun surebet ce scan';
   await delay(2000);
   document.getElementById('scan-progress').style.display = 'none';
   if (running) scheduleNext();
@@ -742,8 +785,7 @@ function scheduleNext() {
 
 async function toggleScan() {
   if (running) {
-    running = false;
-    clearInterval(countdownTimer);
+    running = false; clearInterval(countdownTimer);
     const btn = document.getElementById('main-btn');
     btn.textContent = '▶️ Démarrer la surveillance';
     btn.className = 'btn-main btn-start';
@@ -752,9 +794,8 @@ async function toggleScan() {
     document.getElementById('scan-progress').style.display = 'none';
   } else {
     if (!cfg('demo') && !cfg('apiKey')) {
-      showTab('settings');
-      document.getElementById('api-key').focus();
-      alert('⚠️ Configure ta clé Odds API dans les Réglages, ou active le Mode Démo !');
+      showTab('settings'); document.getElementById('api-key').focus();
+      alert('⚠️ Configure ta clé Odds API dans Réglages, ou active le Mode Démo !');
       return;
     }
     if (activeBookmakers.size < 2) {
@@ -775,7 +816,7 @@ async function toggleScan() {
 //  ADD SUREBET
 // ══════════════════════════════════════════════
 function addSurebet(event, outcomes, arb, sport) {
-  totalFound++; totalGain += arb.guaranteedProfit;
+  totalFound++; totalGain = +(totalGain + arb.guaranteedProfit).toFixed(2);
   document.getElementById('stat-found').textContent  = totalFound;
   document.getElementById('stat-profit').textContent = totalGain.toFixed(0) + '€';
   const ts = new Date().toISOString();
@@ -799,7 +840,7 @@ function surebetCardHTML(entry) {
     <div class="bet-row">
       <div>
         <div class="bet-outcome">${o.name}</div>
-        <div class="bet-bk">${o.bookmaker}</div>
+        <div class="bet-bk">${o.bookmaker || o.bkName} 🇫🇷</div>
       </div>
       <div class="bet-right">
         <div class="bet-odds">${o.odds}</div>
@@ -817,35 +858,25 @@ function surebetCardHTML(entry) {
       </div>
       <div class="surebet-bets">${bets}</div>
       <div class="surebet-footer">
-        <span>Bankroll : ${cfg('bankroll')}€</span>
-        <span class="surebet-gain">+${arb.guaranteedProfit}€ garanti</span>
+        <span>Misé : ${arb.totalInvested}€ | Retour : ${arb.guaranteedReturn}€</span>
+        <span class="surebet-gain">+${arb.guaranteedProfit}€ (+${arb.profitPct}%)</span>
       </div>
     </div>`;
 }
-
 function renderAlerts() {
-  const el = document.getElementById('alerts-list');
-  el.innerHTML = alerts.length === 0
+  document.getElementById('alerts-list').innerHTML = !alerts.length
     ? `<div class="empty"><div class="empty-icon">🔔</div><h3>Aucune alerte</h3><p>Les surebets apparaîtront ici</p></div>`
-    : alerts.slice(0, 20).map(surebetCardHTML).join('');
+    : alerts.slice(0,20).map(surebetCardHTML).join('');
 }
-function renderLastSurebet(e) {
-  document.getElementById('last-surebet').innerHTML = surebetCardHTML(e);
-}
+function renderLastSurebet(e) { document.getElementById('last-surebet').innerHTML = surebetCardHTML(e); }
 function renderHistory() {
   const el = document.getElementById('history-list');
-  if (!history.length) {
-    el.innerHTML = `<div class="empty"><div class="empty-icon">📋</div><h3>Historique vide</h3></div>`;
-    return;
-  }
-  el.innerHTML = history.slice(0, 50).map(h => {
+  if (!history.length) { el.innerHTML = `<div class="empty"><div class="empty-icon">📋</div><h3>Historique vide</h3></div>`; return; }
+  el.innerHTML = history.slice(0,50).map(h => {
     const t = new Date(h.ts).toLocaleString('fr-FR', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' });
     return `<div class="log-entry">
       <div class="log-icon">⚽</div>
-      <div class="log-text">
-        <div class="log-title">${h.match}</div>
-        <div class="log-sub">${h.sport} · ${t}</div>
-      </div>
+      <div class="log-text"><div class="log-title">${h.match}</div><div class="log-sub">${h.sport} · ${t}</div></div>
       <div class="log-profit">+${h.gain}€</div>
     </div>`;
   }).join('');
@@ -855,32 +886,25 @@ function clearHistory() {
   history = []; alerts = []; totalFound = 0; totalGain = 0;
   document.getElementById('stat-found').textContent  = '0';
   document.getElementById('stat-profit').textContent = '0€';
-  document.getElementById('last-surebet').innerHTML  =
+  document.getElementById('last-surebet').innerHTML =
     `<div class="empty" style="padding:20px"><div class="empty-icon">🔍</div><p>Lance le scan pour détecter les surebets</p></div>`;
   saveHistory(); renderHistory(); renderAlerts();
 }
 
-// ══════════════════════════════════════════════
-//  UTILS
-// ══════════════════════════════════════════════
 function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
 function playBeep() {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    [880, 1100, 1320].forEach((freq, i) => {
-      const osc = ctx.createOscillator(), gain = ctx.createGain();
-      osc.connect(gain); gain.connect(ctx.destination);
-      osc.frequency.value = freq; osc.type = 'sine';
-      gain.gain.setValueAtTime(.3, ctx.currentTime + i * .12);
-      gain.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + i * .12 + .15);
-      osc.start(ctx.currentTime + i * .12);
-      osc.stop(ctx.currentTime + i * .12 + .15);
+    [880, 1100, 1320].forEach((f, i) => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value = f; o.type = 'sine';
+      g.gain.setValueAtTime(.3, ctx.currentTime + i*.12);
+      g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + i*.12 + .15);
+      o.start(ctx.currentTime + i*.12);
+      o.stop(ctx.currentTime + i*.12 + .15);
     });
-  } catch (e) {}
-}
-function checkInstallable() {
-  if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.navigator.standalone)
-    document.getElementById('install-banner').style.display = 'block';
+  } catch(e) {}
 }
 
 // ══════════════════════════════════════════════
@@ -890,7 +914,8 @@ loadSettings();
 renderBookmakers();
 updateBkSummary();
 loadHistory();
-checkInstallable();
+if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.navigator.standalone)
+  document.getElementById('install-banner').style.display = 'block';
 </script>
 </body>
 </html>
