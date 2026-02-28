@@ -1,140 +1,145 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="SureBet" />
-  <meta name="theme-color" content="#0f172a" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="SureBet"/>
+  <meta name="theme-color" content="#0f172a"/>
   <title>SureBet — Arbitrage Sportif</title>
-
-  <!-- iOS icons -->
-  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230f172a'/><text y='.9em' font-size='80' x='50%' text-anchor='middle'>🎯</text></svg>" />
-
   <style>
-    /* ── RESET & BASE ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg:        #0f172a;
-      --surface:   #1e293b;
-      --surface2:  #273549;
-      --accent:    #22c55e;
-      --accent2:   #16a34a;
-      --warn:      #f59e0b;
-      --danger:    #ef4444;
-      --text:      #f1f5f9;
-      --muted:     #94a3b8;
-      --border:    #334155;
-      --radius:    16px;
-      --safe-top:  env(safe-area-inset-top, 0px);
-      --safe-bot:  env(safe-area-inset-bottom, 0px);
+      --bg: #0f172a; --surface: #1e293b; --surface2: #273549;
+      --accent: #22c55e; --accent2: #16a34a; --warn: #f59e0b;
+      --danger: #ef4444; --text: #f1f5f9; --muted: #94a3b8;
+      --border: #334155; --radius: 16px;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bot: env(safe-area-inset-bottom, 0px);
     }
     html, body {
       height: 100%; background: var(--bg); color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
       -webkit-font-smoothing: antialiased; overflow: hidden;
     }
-
-    /* ── LAYOUT ── */
     #app {
-      display: flex; flex-direction: column;
-      height: 100dvh;
-      padding-top: var(--safe-top);
-      padding-bottom: var(--safe-bot);
+      display: flex; flex-direction: column; height: 100dvh;
+      padding-top: var(--safe-top); padding-bottom: var(--safe-bot);
     }
-
-    /* ── HEADER ── */
     header {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 16px 20px 12px;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
-      flex-shrink: 0;
+      padding: 16px 20px 12px; background: var(--bg);
+      border-bottom: 1px solid var(--border); flex-shrink: 0;
     }
     .logo { display: flex; align-items: center; gap: 10px; }
     .logo-icon { font-size: 26px; }
-    .logo-text { font-size: 20px; font-weight: 700; letter-spacing: -.3px; }
+    .logo-text { font-size: 20px; font-weight: 700; }
     .logo-text span { color: var(--accent); }
     #status-dot {
       width: 10px; height: 10px; border-radius: 50%;
       background: var(--muted); transition: background .3s;
-      box-shadow: 0 0 0 0 transparent;
     }
-    #status-dot.active {
-      background: var(--accent);
-      animation: pulse 2s infinite;
-    }
+    #status-dot.active { background: var(--accent); animation: pulse 2s infinite; }
     @keyframes pulse {
       0%   { box-shadow: 0 0 0 0 rgba(34,197,94,.4); }
       70%  { box-shadow: 0 0 0 10px rgba(34,197,94,0); }
       100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
     }
-
-    /* ── TABS ── */
     nav {
       display: flex; background: var(--surface);
       border-bottom: 1px solid var(--border); flex-shrink: 0;
     }
     nav button {
-      flex: 1; padding: 12px 0; border: none; background: none;
-      color: var(--muted); font-size: 12px; font-weight: 600;
-      cursor: pointer; transition: all .2s; display: flex;
-      flex-direction: column; align-items: center; gap: 3px;
+      flex: 1; padding: 11px 0; border: none; background: none;
+      color: var(--muted); font-size: 11px; font-weight: 600;
+      cursor: pointer; transition: all .2s;
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
     }
-    nav button .tab-icon { font-size: 18px; }
+    nav button .ti { font-size: 18px; }
     nav button.active { color: var(--accent); border-bottom: 2px solid var(--accent); }
-
-    /* ── CONTENT ── */
-    .content {
-      flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
-    }
+    .content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
     .page { display: none; padding: 16px; }
     .page.active { display: block; }
-
-    /* ── CARDS ── */
     .card {
       background: var(--surface); border-radius: var(--radius);
       border: 1px solid var(--border); padding: 16px; margin-bottom: 12px;
     }
     .card-title {
-      font-size: 13px; font-weight: 600; color: var(--muted);
-      text-transform: uppercase; letter-spacing: .6px; margin-bottom: 12px;
+      font-size: 12px; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .8px; margin-bottom: 14px;
     }
-
-    /* ── STATS ROW ── */
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-    .stat-card {
-      background: var(--surface2); border-radius: 12px;
-      padding: 14px; text-align: center;
-    }
+    .stat-card { background: var(--surface2); border-radius: 12px; padding: 14px; text-align: center; }
     .stat-val { font-size: 24px; font-weight: 700; color: var(--accent); }
     .stat-label { font-size: 11px; color: var(--muted); margin-top: 3px; }
-
-    /* ── BIG BUTTON ── */
     .btn-main {
       width: 100%; padding: 16px; border-radius: var(--radius);
       border: none; font-size: 16px; font-weight: 700;
-      cursor: pointer; transition: all .15s; letter-spacing: .3px;
+      cursor: pointer; transition: all .15s;
     }
     .btn-start { background: var(--accent); color: #fff; }
     .btn-start:active { transform: scale(.97); background: var(--accent2); }
     .btn-stop { background: var(--danger); color: #fff; }
     .btn-stop:active { transform: scale(.97); }
-
-    /* ── FORM ── */
     .field { margin-bottom: 14px; }
     .field label { font-size: 13px; color: var(--muted); display: block; margin-bottom: 6px; font-weight: 600; }
     .field input {
       width: 100%; padding: 13px 14px; background: var(--surface2);
       border: 1px solid var(--border); border-radius: 10px;
-      color: var(--text); font-size: 16px; /* prevents zoom on iOS */
-      outline: none; transition: border-color .2s;
+      color: var(--text); font-size: 16px; outline: none; transition: border-color .2s;
     }
     .field input:focus { border-color: var(--accent); }
     .field .hint { font-size: 11px; color: var(--muted); margin-top: 5px; }
 
-    /* ── SUREBET ALERT CARD ── */
+    /* ── BOOKMAKER GRID ── */
+    .bk-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;
+    }
+    .bk-item {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--surface2); border-radius: 10px;
+      padding: 10px 12px; cursor: pointer;
+      border: 1.5px solid transparent; transition: all .2s;
+      user-select: none; -webkit-user-select: none;
+    }
+    .bk-item.active { border-color: var(--accent); background: #052e16; }
+    .bk-name { font-size: 13px; font-weight: 600; }
+    .bk-flag { font-size: 16px; }
+    .bk-check { font-size: 14px; color: var(--accent); display: none; }
+    .bk-item.active .bk-check { display: block; }
+    .bk-all-btn {
+      width: 100%; padding: 10px; border-radius: 10px;
+      border: 1px solid var(--border); background: var(--surface2);
+      color: var(--muted); font-size: 13px; font-weight: 600;
+      cursor: pointer; margin-bottom: 10px;
+    }
+    .bk-count {
+      font-size: 12px; color: var(--accent); text-align: center;
+      margin-top: 6px; font-weight: 600;
+    }
+
+    /* ── TOGGLE ── */
+    .toggle-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 4px 0; margin-bottom: 10px;
+    }
+    .toggle-label { font-size: 14px; color: var(--text); }
+    .toggle { position: relative; width: 50px; height: 28px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute; inset: 0; background: var(--border);
+      border-radius: 28px; cursor: pointer; transition: .3s;
+    }
+    .toggle-slider::before {
+      content: ''; position: absolute;
+      width: 22px; height: 22px; left: 3px; top: 3px;
+      background: #fff; border-radius: 50%; transition: .3s;
+    }
+    .toggle input:checked + .toggle-slider { background: var(--accent); }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(22px); }
+
+    /* ── SUREBET CARD ── */
     .surebet-card {
       background: linear-gradient(135deg, #052e16 0%, #14532d 100%);
       border: 1px solid var(--accent); border-radius: var(--radius);
@@ -156,8 +161,8 @@
       display: flex; align-items: center; justify-content: space-between;
       background: rgba(0,0,0,.2); border-radius: 10px; padding: 10px 12px;
     }
-    .bet-outcome { font-size: 13px; font-weight: 600; flex: 1; }
-    .bet-bk { font-size: 11px; color: #86efac; }
+    .bet-outcome { font-size: 13px; font-weight: 600; }
+    .bet-bk { font-size: 11px; color: #86efac; margin-top: 2px; }
     .bet-right { text-align: right; }
     .bet-odds { font-size: 15px; font-weight: 700; color: var(--accent); }
     .bet-stake { font-size: 12px; color: var(--muted); }
@@ -167,13 +172,11 @@
     }
     .surebet-gain { color: var(--accent); font-weight: 700; }
 
-    /* ── EMPTY STATE ── */
-    .empty {
-      text-align: center; padding: 48px 16px; color: var(--muted);
-    }
-    .empty-icon { font-size: 56px; margin-bottom: 14px; }
-    .empty h3 { font-size: 18px; margin-bottom: 6px; color: var(--text); }
-    .empty p { font-size: 14px; line-height: 1.5; }
+    /* ── EMPTY ── */
+    .empty { text-align: center; padding: 40px 16px; color: var(--muted); }
+    .empty-icon { font-size: 52px; margin-bottom: 12px; }
+    .empty h3 { font-size: 17px; margin-bottom: 6px; color: var(--text); }
+    .empty p { font-size: 13px; line-height: 1.5; }
 
     /* ── LOG ── */
     .log-entry {
@@ -186,65 +189,35 @@
     .log-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
     .log-profit { font-size: 14px; font-weight: 700; color: var(--accent); white-space: nowrap; }
 
-    /* ── TOGGLE / SLIDER ── */
-    .toggle-row {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 4px 0; margin-bottom: 10px;
-    }
-    .toggle-label { font-size: 14px; color: var(--text); }
-    .toggle {
-      position: relative; width: 50px; height: 28px;
-    }
-    .toggle input { opacity: 0; width: 0; height: 0; }
-    .toggle-slider {
-      position: absolute; inset: 0; background: var(--border);
-      border-radius: 28px; cursor: pointer; transition: .3s;
-    }
-    .toggle-slider::before {
-      content: ''; position: absolute;
-      width: 22px; height: 22px; left: 3px; top: 3px;
-      background: #fff; border-radius: 50%; transition: .3s;
-    }
-    .toggle input:checked + .toggle-slider { background: var(--accent); }
-    .toggle input:checked + .toggle-slider::before { transform: translateX(22px); }
-
-    /* ── SCAN PROGRESS ── */
+    /* ── PROGRESS ── */
     #scan-progress { display: none; margin-top: 12px; }
-    .progress-bar {
-      height: 4px; background: var(--border); border-radius: 2px; overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%; background: var(--accent); border-radius: 2px;
-      transition: width .5s ease; width: 0%;
-    }
+    .progress-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width .5s ease; width: 0%; }
     .progress-text { font-size: 12px; color: var(--muted); margin-top: 6px; text-align: center; }
+
+    /* ── BADGE ── */
+    .badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 17px; height: 17px; padding: 0 4px;
+      background: var(--danger); color: #fff; border-radius: 9px;
+      font-size: 10px; font-weight: 700;
+    }
 
     /* ── INSTALL BANNER ── */
     #install-banner {
-      display: none;
-      margin: 12px 16px; padding: 14px 16px;
-      background: linear-gradient(135deg, var(--surface), var(--surface2));
-      border: 1px solid var(--warn); border-radius: var(--radius);
+      display: none; margin: 10px 16px; padding: 12px 14px;
+      background: var(--surface2); border: 1px solid var(--warn);
+      border-radius: var(--radius);
     }
-    #install-banner h4 { font-size: 14px; margin-bottom: 4px; }
+    #install-banner h4 { font-size: 13px; margin-bottom: 3px; }
     #install-banner p { font-size: 12px; color: var(--muted); line-height: 1.4; }
 
-    /* ── NOTIFICATION BADGE ── */
-    .badge {
-      display: inline-flex; align-items: center; justify-content: center;
-      min-width: 18px; height: 18px; padding: 0 5px;
-      background: var(--danger); color: #fff; border-radius: 9px;
-      font-size: 11px; font-weight: 700;
-    }
-
-    /* ── SCROLLBAR ── */
     ::-webkit-scrollbar { width: 0; }
   </style>
 </head>
 <body>
 <div id="app">
 
-  <!-- HEADER -->
   <header>
     <div class="logo">
       <span class="logo-icon">🎯</span>
@@ -256,36 +229,31 @@
     </div>
   </header>
 
-  <!-- INSTALL BANNER (iOS) -->
   <div id="install-banner">
     <h4>📲 Installer sur l'écran d'accueil</h4>
-    <p>Appuie sur <strong>⎙ Partager</strong> puis <strong>« Sur l'écran d'accueil »</strong> pour utiliser SureBet comme une vraie app.</p>
+    <p>Appuie sur <strong>⎙ Partager</strong> puis <strong>« Sur l'écran d'accueil »</strong></p>
   </div>
 
-  <!-- TABS -->
   <nav>
     <button class="active" onclick="showTab('home')" id="tab-home">
-      <span class="tab-icon">🏠</span>Accueil
+      <span class="ti">🏠</span>Accueil
     </button>
     <button onclick="showTab('alerts')" id="tab-alerts">
-      <span class="tab-icon">🔔</span>Alertes
+      <span class="ti">🔔</span>Alertes
       <span class="badge" id="alerts-badge" style="display:none"></span>
     </button>
     <button onclick="showTab('history')" id="tab-history">
-      <span class="tab-icon">📋</span>Historique
+      <span class="ti">📋</span>Historique
     </button>
     <button onclick="showTab('settings')" id="tab-settings">
-      <span class="tab-icon">⚙️</span>Réglages
+      <span class="ti">⚙️</span>Réglages
     </button>
   </nav>
 
-  <!-- CONTENT -->
   <div class="content">
 
-    <!-- ═══ PAGE ACCUEIL ═══ -->
+    <!-- ══ ACCUEIL ══ -->
     <div class="page active" id="page-home">
-
-      <!-- Stats -->
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-val" id="stat-found">0</div>
@@ -305,8 +273,8 @@
         </div>
       </div>
 
-      <!-- Bouton principal -->
       <div class="card">
+        <div id="bk-summary" style="font-size:12px;color:var(--muted);margin-bottom:12px;text-align:center"></div>
         <button class="btn-main btn-start" id="main-btn" onclick="toggleScan()">
           ▶️ Démarrer la surveillance
         </button>
@@ -316,7 +284,6 @@
         </div>
       </div>
 
-      <!-- Dernier surebet -->
       <div class="card">
         <div class="card-title">Dernier surebet détecté</div>
         <div id="last-surebet">
@@ -326,21 +293,20 @@
           </div>
         </div>
       </div>
-
     </div>
 
-    <!-- ═══ PAGE ALERTES ═══ -->
+    <!-- ══ ALERTES ══ -->
     <div class="page" id="page-alerts">
       <div id="alerts-list">
         <div class="empty">
           <div class="empty-icon">🔔</div>
           <h3>Aucune alerte</h3>
-          <p>Les surebets détectés apparaîtront ici en temps réel</p>
+          <p>Les surebets apparaîtront ici en temps réel</p>
         </div>
       </div>
     </div>
 
-    <!-- ═══ PAGE HISTORIQUE ═══ -->
+    <!-- ══ HISTORIQUE ══ -->
     <div class="page" id="page-history">
       <div class="card" style="padding:0 16px">
         <div id="history-list">
@@ -357,50 +323,66 @@
       </button>
     </div>
 
-    <!-- ═══ PAGE RÉGLAGES ═══ -->
+    <!-- ══ RÉGLAGES ══ -->
     <div class="page" id="page-settings">
 
+      <!-- Clé API -->
       <div class="card">
         <div class="card-title">🔑 Clé API</div>
         <div class="field">
           <label>Odds API Key</label>
           <input type="password" id="api-key" placeholder="Colle ta clé ici…"
-            oninput="saveSettings()" autocomplete="off" />
+            oninput="saveSettings()" autocomplete="off"/>
           <div class="hint">Clé gratuite sur <strong>the-odds-api.com</strong> (500 req/mois)</div>
         </div>
       </div>
 
+      <!-- Bankroll -->
       <div class="card">
         <div class="card-title">💰 Bankroll & Profit</div>
         <div class="field">
           <label>Bankroll (€)</label>
-          <input type="number" id="bankroll" value="1000" min="1" oninput="saveSettings()" />
+          <input type="number" id="bankroll" value="1000" min="1" oninput="saveSettings()"/>
         </div>
         <div class="field">
           <label>Profit minimum (%)</label>
-          <input type="number" id="min-profit" value="1.0" min="0" step="0.1" oninput="saveSettings()" />
-          <div class="hint">Plus la valeur est basse, plus d'alertes (mais moins sûr)</div>
+          <input type="number" id="min-profit" value="1.0" min="0" step="0.1" oninput="saveSettings()"/>
+          <div class="hint">Plus bas = plus d'alertes (mais attention aux faux surebets)</div>
         </div>
       </div>
 
+      <!-- ✅ TOP 10 BOOKMAKERS FRANCE -->
+      <div class="card">
+        <div class="card-title">🇫🇷 Top 10 Bookmakers France</div>
+        <button class="bk-all-btn" onclick="toggleAllBookmakers()">
+          ☑️ Tout sélectionner / Tout désélectionner
+        </button>
+        <div class="bk-grid" id="bk-grid"></div>
+        <div class="bk-count" id="bk-count"></div>
+        <div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5">
+          ℹ️ Seules les cotes des bookmakers cochés seront analysées pour détecter les surebets.
+        </div>
+      </div>
+
+      <!-- Scan -->
       <div class="card">
         <div class="card-title">⏱ Scan</div>
         <div class="field">
           <label>Intervalle entre scans (secondes)</label>
-          <input type="number" id="scan-interval" value="120" min="30" oninput="saveSettings()" />
+          <input type="number" id="scan-interval" value="120" min="30" oninput="saveSettings()"/>
           <div class="hint">Minimum 30s pour ne pas épuiser le quota API</div>
         </div>
         <div class="toggle-row">
           <span class="toggle-label">Alertes sonores</span>
           <label class="toggle">
-            <input type="checkbox" id="sound-toggle" checked onchange="saveSettings()" />
+            <input type="checkbox" id="sound-toggle" checked onchange="saveSettings()"/>
             <span class="toggle-slider"></span>
           </label>
         </div>
         <div class="toggle-row">
           <span class="toggle-label">Mode démo (sans clé API)</span>
           <label class="toggle">
-            <input type="checkbox" id="demo-toggle" onchange="saveSettings()" />
+            <input type="checkbox" id="demo-toggle" onchange="saveSettings()"/>
             <span class="toggle-slider"></span>
           </label>
         </div>
@@ -409,9 +391,9 @@
       <div class="card" style="background:var(--surface2)">
         <div class="card-title">ℹ️ Comment ça marche</div>
         <p style="font-size:13px;color:var(--muted);line-height:1.6">
-          Le bot récupère les cotes de <strong>dizaines de bookmakers</strong> en temps réel (Bet365, Unibet, Pinnacle, Betclic…),
-          extrait la meilleure cote par outcome, puis calcule le <strong>taux d'arbitrage</strong>.
-          Si la somme des inverses des cotes est inférieure à 1, c'est un surebet garanti ! 💰
+          Le bot compare les cotes des bookmakers français sélectionnés.
+          Pour chaque match, il extrait la <strong>meilleure cote par outcome</strong>
+          et calcule le taux d'arbitrage. Si Σ(1/cote) &lt; 1 → 🎯 <strong>Surebet garanti !</strong>
         </p>
       </div>
 
@@ -421,42 +403,58 @@
 
 <script>
 // ══════════════════════════════════════════════
+//  TOP 10 BOOKMAKERS FRANCE
+// ══════════════════════════════════════════════
+const FRENCH_BOOKMAKERS = [
+  { id: 'winamax',      name: 'Winamax',      flag: '🥇' },
+  { id: 'betclic',      name: 'Betclic',       flag: '🥈' },
+  { id: 'unibet',       name: 'Unibet',        flag: '🥉' },
+  { id: 'pmu',          name: 'PMU',           flag: '🐎' },
+  { id: 'bet365',       name: 'Bet365',        flag: '🌍' },
+  { id: 'bwin',         name: 'Bwin',          flag: '⚽' },
+  { id: 'netbet',       name: 'NetBet',        flag: '🎯' },
+  { id: 'zebet',        name: 'ZEbet',         flag: '⚡' },
+  { id: 'parionssport', name: 'ParionsSport',  flag: '🏅' },
+  { id: 'france_pari',  name: 'France Pari',   flag: '🇫🇷' },
+];
+
+// Active bookmakers (all by default)
+let activeBookmakers = new Set(FRENCH_BOOKMAKERS.map(b => b.id));
+
+// ══════════════════════════════════════════════
 //  STATE
 // ══════════════════════════════════════════════
-let running      = false;
-let scanCount    = 0;
-let totalFound   = 0;
-let totalGain    = 0;
-let scanTimer    = null;
-let countdownTimer = null;
-let nextScanIn   = 0;
-let alerts       = [];
-let history      = [];
-let newAlertsCount = 0;
-let currentTab   = 'home';
+let running = false, scanCount = 0, totalFound = 0, totalGain = 0;
+let countdownTimer = null, nextScanIn = 0;
+let alerts = [], history = [], newAlertsCount = 0, currentTab = 'home';
 
-// Load persisted settings
+// ══════════════════════════════════════════════
+//  SETTINGS
+// ══════════════════════════════════════════════
 function loadSettings() {
   const s = JSON.parse(localStorage.getItem('sb_settings') || '{}');
-  if (s.apiKey)      document.getElementById('api-key').value      = s.apiKey;
-  if (s.bankroll)    document.getElementById('bankroll').value     = s.bankroll;
-  if (s.minProfit)   document.getElementById('min-profit').value   = s.minProfit;
-  if (s.interval)    document.getElementById('scan-interval').value = s.interval;
+  if (s.apiKey)    document.getElementById('api-key').value      = s.apiKey;
+  if (s.bankroll)  document.getElementById('bankroll').value     = s.bankroll;
+  if (s.minProfit) document.getElementById('min-profit').value   = s.minProfit;
+  if (s.interval)  document.getElementById('scan-interval').value= s.interval;
   if (s.sound  !== undefined) document.getElementById('sound-toggle').checked = s.sound;
   if (s.demo   !== undefined) document.getElementById('demo-toggle').checked  = s.demo;
+  if (s.bookmakers) activeBookmakers = new Set(s.bookmakers);
 }
 function saveSettings() {
   localStorage.setItem('sb_settings', JSON.stringify({
-    apiKey:    document.getElementById('api-key').value,
-    bankroll:  document.getElementById('bankroll').value,
-    minProfit: document.getElementById('min-profit').value,
-    interval:  document.getElementById('scan-interval').value,
-    sound:     document.getElementById('sound-toggle').checked,
-    demo:      document.getElementById('demo-toggle').checked,
+    apiKey:      document.getElementById('api-key').value,
+    bankroll:    document.getElementById('bankroll').value,
+    minProfit:   document.getElementById('min-profit').value,
+    interval:    document.getElementById('scan-interval').value,
+    sound:       document.getElementById('sound-toggle').checked,
+    demo:        document.getElementById('demo-toggle').checked,
+    bookmakers:  [...activeBookmakers],
   }));
+  updateBkSummary();
 }
 function cfg(key) {
-  const map = {
+  const m = {
     apiKey:    () => document.getElementById('api-key').value.trim(),
     bankroll:  () => parseFloat(document.getElementById('bankroll').value) || 1000,
     minProfit: () => parseFloat(document.getElementById('min-profit').value) || 1.0,
@@ -464,16 +462,75 @@ function cfg(key) {
     sound:     () => document.getElementById('sound-toggle').checked,
     demo:      () => document.getElementById('demo-toggle').checked,
   };
-  return map[key]();
+  return m[key]();
 }
-
-// Load history from localStorage
 function loadHistory() {
   history = JSON.parse(localStorage.getItem('sb_history') || '[]');
   renderHistory();
 }
 function saveHistory() {
   localStorage.setItem('sb_history', JSON.stringify(history.slice(0, 100)));
+}
+
+// ══════════════════════════════════════════════
+//  BOOKMAKERS UI
+// ══════════════════════════════════════════════
+function renderBookmakers() {
+  const grid = document.getElementById('bk-grid');
+  grid.innerHTML = FRENCH_BOOKMAKERS.map(bk => `
+    <div class="bk-item ${activeBookmakers.has(bk.id) ? 'active' : ''}"
+         onclick="toggleBookmaker('${bk.id}')" id="bk-${bk.id}">
+      <div>
+        <div class="bk-name">${bk.name}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <span>${bk.flag}</span>
+        <span class="bk-check">✓</span>
+      </div>
+    </div>
+  `).join('');
+  updateBkCount();
+}
+
+function toggleBookmaker(id) {
+  if (activeBookmakers.has(id)) {
+    if (activeBookmakers.size <= 2) {
+      alert('⚠️ Garde au moins 2 bookmakers pour détecter des surebets !');
+      return;
+    }
+    activeBookmakers.delete(id);
+    document.getElementById('bk-' + id).classList.remove('active');
+  } else {
+    activeBookmakers.add(id);
+    document.getElementById('bk-' + id).classList.add('active');
+  }
+  updateBkCount();
+  saveSettings();
+}
+
+function toggleAllBookmakers() {
+  if (activeBookmakers.size === FRENCH_BOOKMAKERS.length) {
+    // Désélectionner tout sauf 2 premiers
+    activeBookmakers = new Set(FRENCH_BOOKMAKERS.slice(0,2).map(b => b.id));
+  } else {
+    activeBookmakers = new Set(FRENCH_BOOKMAKERS.map(b => b.id));
+  }
+  renderBookmakers();
+  saveSettings();
+}
+
+function updateBkCount() {
+  const n = activeBookmakers.size;
+  document.getElementById('bk-count').textContent =
+    `${n} bookmaker${n > 1 ? 's' : ''} sélectionné${n > 1 ? 's' : ''}`;
+}
+
+function updateBkSummary() {
+  const names = FRENCH_BOOKMAKERS
+    .filter(b => activeBookmakers.has(b.id))
+    .map(b => b.name).join(', ');
+  document.getElementById('bk-summary').textContent =
+    `🎯 Analyse : ${names}`;
 }
 
 // ══════════════════════════════════════════════
@@ -485,20 +542,12 @@ function showTab(tab) {
   document.getElementById('page-' + tab).classList.add('active');
   document.getElementById('tab-' + tab).classList.add('active');
   currentTab = tab;
-  if (tab === 'alerts') {
-    newAlertsCount = 0;
-    updateBadge();
-  }
+  if (tab === 'alerts') { newAlertsCount = 0; updateBadge(); }
 }
-
 function updateBadge() {
-  const badge = document.getElementById('alerts-badge');
-  if (newAlertsCount > 0) {
-    badge.style.display = 'inline-flex';
-    badge.textContent   = newAlertsCount;
-  } else {
-    badge.style.display = 'none';
-  }
+  const b = document.getElementById('alerts-badge');
+  if (newAlertsCount > 0) { b.style.display = 'inline-flex'; b.textContent = newAlertsCount; }
+  else b.style.display = 'none';
 }
 
 // ══════════════════════════════════════════════
@@ -514,6 +563,7 @@ async function fetchSports(apiKey) {
 }
 
 async function fetchOdds(apiKey, sportKey) {
+  // On utilise la région EU qui inclut les bookmakers français
   const r = await fetch(
     `https://api.the-odds-api.com/v4/sports/${sportKey}/odds?apiKey=${apiKey}&regions=eu&markets=h2h&oddsFormat=decimal`
   );
@@ -525,11 +575,18 @@ async function fetchOdds(apiKey, sportKey) {
 }
 
 // ══════════════════════════════════════════════
-//  ARBITRAGE MATH
+//  ARBITRAGE (filtré par bookmakers FR sélectionnés)
 // ══════════════════════════════════════════════
 function findBestOdds(event) {
   const best = {};
   for (const bk of event.bookmakers || []) {
+    // 🔑 Filtre : uniquement les bookmakers français sélectionnés
+    const bkIdNorm = bk.key || bk.title.toLowerCase().replace(/\s/g,'_');
+    const isActive = [...activeBookmakers].some(id =>
+      bkIdNorm.includes(id) || id.includes(bkIdNorm)
+    );
+    if (!isActive) continue;
+
     for (const market of bk.markets || []) {
       if (market.key !== 'h2h') continue;
       for (const o of market.outcomes || []) {
@@ -546,12 +603,15 @@ function calcArbitrage(outcomes) {
   const arb = outcomes.reduce((s, o) => s + 1 / o.odds, 0);
   if (arb >= 1) return null;
   const profitPct = (1 / arb - 1) * 100;
-  const bankroll  = cfg('bankroll');
   if (profitPct < cfg('minProfit')) return null;
-  const stakes          = outcomes.map(o => +((bankroll / arb) / o.odds).toFixed(2));
+  const bankroll = cfg('bankroll');
+  const stakes = outcomes.map(o => +((bankroll / arb) / o.odds).toFixed(2));
   const guaranteedReturn = +(bankroll / arb).toFixed(2);
   const guaranteedProfit = +(guaranteedReturn - bankroll).toFixed(2);
-  return { arb: +(arb * 100).toFixed(4), profitPct: +profitPct.toFixed(4), stakes, guaranteedReturn, guaranteedProfit };
+  return {
+    arb: +(arb * 100).toFixed(4), profitPct: +profitPct.toFixed(4),
+    stakes, guaranteedReturn, guaranteedProfit
+  };
 }
 
 // ══════════════════════════════════════════════
@@ -561,43 +621,55 @@ function getDemoData() {
   const now = new Date(); now.setHours(now.getHours() + 2);
   return [
     {
-      sport: 'Football', home: 'PSG', away: 'Marseille',
-      date: now.toISOString(),
+      sport: 'Football 🇫🇷', home: 'PSG', away: 'Marseille', date: now.toISOString(),
       outcomes: [
-        { name: 'PSG',       odds: 1.92, bookmaker: 'Bet365'  },
-        { name: 'Nul',       odds: 4.10, bookmaker: 'Winamax' },
-        { name: 'Marseille', odds: 4.80, bookmaker: 'Betclic' },
+        { name: 'PSG',       odds: 1.92, bookmaker: 'Winamax' },
+        { name: 'Nul',       odds: 4.10, bookmaker: 'Betclic' },
+        { name: 'Marseille', odds: 5.20, bookmaker: 'PMU'     },
       ]
     },
     {
-      sport: 'Tennis', home: 'Alcaraz', away: 'Sinner',
-      date: now.toISOString(),
+      sport: 'Tennis', home: 'Alcaraz', away: 'Sinner', date: now.toISOString(),
       outcomes: [
-        { name: 'Alcaraz', odds: 2.05, bookmaker: 'Unibet'   },
-        { name: 'Sinner',  odds: 2.05, bookmaker: 'Pinnacle' },
+        { name: 'Alcaraz', odds: 2.05, bookmaker: 'Unibet'      },
+        { name: 'Sinner',  odds: 2.08, bookmaker: 'ParionsSport' },
       ]
     },
     {
-      sport: 'Basketball', home: 'Lakers', away: 'Celtics',
-      date: now.toISOString(),
+      sport: 'Basketball', home: 'Lakers', away: 'Celtics', date: now.toISOString(),
       outcomes: [
-        { name: 'Lakers',  odds: 1.95, bookmaker: 'Unibet'  },
-        { name: 'Celtics', odds: 2.10, bookmaker: 'Bet365'  },
+        { name: 'Lakers',  odds: 1.98, bookmaker: 'Bwin'   },
+        { name: 'Celtics', odds: 2.10, bookmaker: 'NetBet' },
       ]
-    }
+    },
+    {
+      sport: 'Football', home: 'Lyon', away: 'Monaco', date: now.toISOString(),
+      outcomes: [
+        { name: 'Lyon',   odds: 2.80, bookmaker: 'ZEbet'       },
+        { name: 'Nul',    odds: 3.40, bookmaker: 'France Pari' },
+        { name: 'Monaco', odds: 2.60, bookmaker: 'Bet365'      },
+      ]
+    },
   ];
 }
 
 function runDemoScan() {
   const events = getDemoData();
-  // Randomize one to be a real surebet
-  events[0].outcomes[2].odds = 5.20; // Forces surebet on first event
+  events[0].outcomes[2].odds = 5.50; // Force surebet
+  events[2].outcomes[1].odds = 2.15; // Force surebet tennis
   let found = 0;
   for (const evt of events) {
-    const arb = calcArbitrage(evt.outcomes);
+    // Filtre demo selon bookmakers actifs
+    const filtered = evt.outcomes.filter(o =>
+      [...activeBookmakers].some(id =>
+        o.bookmaker.toLowerCase().replace(/\s/g,'').includes(id.replace('_',''))
+      )
+    );
+    if (filtered.length < 2) continue;
+    const arb = calcArbitrage(filtered);
     if (arb) {
       found++;
-      addSurebet({ home_team: evt.home, away_team: evt.away, commence_time: evt.date }, evt.outcomes, arb, evt.sport);
+      addSurebet({ home_team: evt.home, away_team: evt.away, commence_time: evt.date }, filtered, arb, evt.sport);
     }
   }
   return found;
@@ -610,63 +682,49 @@ async function doScan() {
   if (!running) return;
   scanCount++;
   document.getElementById('stat-scans').textContent = scanCount;
-
-  const progress   = document.getElementById('scan-progress');
-  const fill       = document.getElementById('progress-fill');
-  const progressTxt= document.getElementById('progress-text');
-  progress.style.display = 'block';
-  fill.style.width = '5%';
-  progressTxt.textContent = 'Initialisation…';
+  const fill = document.getElementById('progress-fill');
+  const txt  = document.getElementById('progress-text');
+  document.getElementById('scan-progress').style.display = 'block';
+  fill.style.width = '5%'; txt.textContent = 'Initialisation…';
 
   let found = 0;
-
   try {
     if (cfg('demo')) {
       fill.style.width = '60%';
-      progressTxt.textContent = 'Mode démo — calcul en cours…';
-      await delay(800);
+      txt.textContent = 'Mode démo — analyse en cours…';
+      await delay(900);
       found = runDemoScan();
       fill.style.width = '100%';
     } else {
       const apiKey = cfg('apiKey');
       if (!apiKey) throw new Error('Clé API manquante');
-
-      progressTxt.textContent = 'Récupération des sports…';
+      txt.textContent = 'Récupération des sports…';
       fill.style.width = '10%';
       const sports = await fetchSports(apiKey);
-      const total  = sports.length;
-      let done     = 0;
-
+      let done = 0;
       for (const sport of sports) {
         if (!running) break;
-        progressTxt.textContent = `${sport.title} (${done}/${total})`;
-        fill.style.width = `${10 + (done / total) * 85}%`;
-
+        txt.textContent = `${sport.title} (${done}/${sports.length})`;
+        fill.style.width = `${10 + (done / sports.length) * 85}%`;
         const events = await fetchOdds(apiKey, sport.key);
         for (const event of events) {
           const best = findBestOdds(event);
           if (best.length < 2) continue;
           const arb = calcArbitrage(best);
-          if (arb) {
-            found++;
-            addSurebet(event, best, arb, sport.title);
-          }
+          if (arb) { found++; addSurebet(event, best, arb, sport.title); }
         }
         done++;
-        await delay(150); // small pause between API calls
+        await delay(150);
       }
       fill.style.width = '100%';
     }
   } catch (err) {
-    progressTxt.textContent = `❌ Erreur : ${err.message}`;
+    txt.textContent = `❌ ${err.message}`;
     await delay(3000);
   }
-
-  progressTxt.textContent = found > 0 ? `✅ ${found} surebet(s) trouvé(s) !` : '😴 Aucun surebet ce scan';
+  txt.textContent = found > 0 ? `✅ ${found} surebet(s) trouvé(s) !` : '😴 Aucun surebet ce scan';
   await delay(2000);
-  progress.style.display = 'none';
-
-  // Schedule next scan
+  document.getElementById('scan-progress').style.display = 'none';
   if (running) scheduleNext();
 }
 
@@ -677,38 +735,37 @@ function scheduleNext() {
     if (!running) { clearInterval(countdownTimer); return; }
     nextScanIn--;
     document.getElementById('stat-next').textContent = nextScanIn + 's';
-    if (nextScanIn <= 0) {
-      clearInterval(countdownTimer);
-      doScan();
-    }
+    if (nextScanIn <= 0) { clearInterval(countdownTimer); doScan(); }
   }, 1000);
   document.getElementById('stat-next').textContent = nextScanIn + 's';
 }
 
 async function toggleScan() {
   if (running) {
-    // STOP
     running = false;
-    clearInterval(scanTimer);
     clearInterval(countdownTimer);
     const btn = document.getElementById('main-btn');
     btn.textContent = '▶️ Démarrer la surveillance';
-    btn.className   = 'btn-main btn-start';
+    btn.className = 'btn-main btn-start';
     document.getElementById('status-dot').classList.remove('active');
     document.getElementById('stat-next').textContent = '—';
     document.getElementById('scan-progress').style.display = 'none';
   } else {
-    // START
     if (!cfg('demo') && !cfg('apiKey')) {
       showTab('settings');
       document.getElementById('api-key').focus();
       alert('⚠️ Configure ta clé Odds API dans les Réglages, ou active le Mode Démo !');
       return;
     }
+    if (activeBookmakers.size < 2) {
+      showTab('settings');
+      alert('⚠️ Sélectionne au moins 2 bookmakers !');
+      return;
+    }
     running = true;
     const btn = document.getElementById('main-btn');
     btn.textContent = '⏹ Arrêter la surveillance';
-    btn.className   = 'btn-main btn-stop';
+    btn.className = 'btn-main btn-stop';
     document.getElementById('status-dot').classList.add('active');
     doScan();
   }
@@ -718,42 +775,17 @@ async function toggleScan() {
 //  ADD SUREBET
 // ══════════════════════════════════════════════
 function addSurebet(event, outcomes, arb, sport) {
-  totalFound++;
-  totalGain += arb.guaranteedProfit;
+  totalFound++; totalGain += arb.guaranteedProfit;
   document.getElementById('stat-found').textContent  = totalFound;
   document.getElementById('stat-profit').textContent = totalGain.toFixed(0) + '€';
-
   const ts = new Date().toISOString();
   const entry = { event, outcomes, arb, sport, ts };
-
-  // Add to live alerts
-  alerts.unshift(entry);
-  renderAlerts();
-
-  // Add to history
-  history.unshift({
-    ts, sport,
-    match:  `${event.home_team} vs ${event.away_team}`,
-    profit: arb.profitPct,
-    gain:   arb.guaranteedProfit,
-  });
+  alerts.unshift(entry); renderAlerts();
+  history.unshift({ ts, sport, match: `${event.home_team} vs ${event.away_team}`, profit: arb.profitPct, gain: arb.guaranteedProfit });
   history = history.slice(0, 100);
-  saveHistory();
-  renderHistory();
-
-  // Update last surebet on home
-  renderLastSurebet(entry);
-
-  // Badge
-  if (currentTab !== 'alerts') {
-    newAlertsCount++;
-    updateBadge();
-  }
-
-  // Sound
+  saveHistory(); renderHistory(); renderLastSurebet(entry);
+  if (currentTab !== 'alerts') { newAlertsCount++; updateBadge(); }
   if (cfg('sound')) playBeep();
-
-  // Vibrate (Android/some iOS)
   if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
 }
 
@@ -773,8 +805,7 @@ function surebetCardHTML(entry) {
         <div class="bet-odds">${o.odds}</div>
         <div class="bet-stake">${arb.stakes[i]}€</div>
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
   return `
     <div class="surebet-card">
       <div class="surebet-header">
@@ -789,52 +820,43 @@ function surebetCardHTML(entry) {
         <span>Bankroll : ${cfg('bankroll')}€</span>
         <span class="surebet-gain">+${arb.guaranteedProfit}€ garanti</span>
       </div>
-    </div>
-  `;
+    </div>`;
 }
 
 function renderAlerts() {
   const el = document.getElementById('alerts-list');
-  if (alerts.length === 0) {
-    el.innerHTML = `<div class="empty"><div class="empty-icon">🔔</div><h3>Aucune alerte</h3><p>Les surebets apparaîtront ici</p></div>`;
-    return;
-  }
-  el.innerHTML = alerts.slice(0, 20).map(surebetCardHTML).join('');
+  el.innerHTML = alerts.length === 0
+    ? `<div class="empty"><div class="empty-icon">🔔</div><h3>Aucune alerte</h3><p>Les surebets apparaîtront ici</p></div>`
+    : alerts.slice(0, 20).map(surebetCardHTML).join('');
 }
-
-function renderLastSurebet(entry) {
-  document.getElementById('last-surebet').innerHTML = surebetCardHTML(entry);
+function renderLastSurebet(e) {
+  document.getElementById('last-surebet').innerHTML = surebetCardHTML(e);
 }
-
 function renderHistory() {
   const el = document.getElementById('history-list');
-  if (history.length === 0) {
+  if (!history.length) {
     el.innerHTML = `<div class="empty"><div class="empty-icon">📋</div><h3>Historique vide</h3></div>`;
     return;
   }
   el.innerHTML = history.slice(0, 50).map(h => {
     const t = new Date(h.ts).toLocaleString('fr-FR', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' });
-    return `
-      <div class="log-entry">
-        <div class="log-icon">⚽</div>
-        <div class="log-text">
-          <div class="log-title">${h.match}</div>
-          <div class="log-sub">${h.sport} · ${t}</div>
-        </div>
-        <div class="log-profit">+${h.gain}€</div>
+    return `<div class="log-entry">
+      <div class="log-icon">⚽</div>
+      <div class="log-text">
+        <div class="log-title">${h.match}</div>
+        <div class="log-sub">${h.sport} · ${t}</div>
       </div>
-    `;
+      <div class="log-profit">+${h.gain}€</div>
+    </div>`;
   }).join('');
 }
-
 function clearHistory() {
-  if (!confirm('Effacer tout l\'historique ?')) return;
-  history = [];
-  alerts  = [];
-  totalFound = 0; totalGain = 0;
+  if (!confirm("Effacer tout l'historique ?")) return;
+  history = []; alerts = []; totalFound = 0; totalGain = 0;
   document.getElementById('stat-found').textContent  = '0';
   document.getElementById('stat-profit').textContent = '0€';
-  document.getElementById('last-surebet').innerHTML  = `<div class="empty" style="padding:20px"><div class="empty-icon">🔍</div><p>Lance le scan pour détecter les surebets</p></div>`;
+  document.getElementById('last-surebet').innerHTML  =
+    `<div class="empty" style="padding:20px"><div class="empty-icon">🔍</div><p>Lance le scan pour détecter les surebets</p></div>`;
   saveHistory(); renderHistory(); renderAlerts();
 }
 
@@ -842,16 +864,13 @@ function clearHistory() {
 //  UTILS
 // ══════════════════════════════════════════════
 function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
-
 function playBeep() {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     [880, 1100, 1320].forEach((freq, i) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
+      const osc = ctx.createOscillator(), gain = ctx.createGain();
       osc.connect(gain); gain.connect(ctx.destination);
-      osc.frequency.value = freq;
-      osc.type = 'sine';
+      osc.frequency.value = freq; osc.type = 'sine';
       gain.gain.setValueAtTime(.3, ctx.currentTime + i * .12);
       gain.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + i * .12 + .15);
       osc.start(ctx.currentTime + i * .12);
@@ -859,20 +878,17 @@ function playBeep() {
     });
   } catch (e) {}
 }
-
-// iOS install banner
 function checkInstallable() {
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const isStandalone = window.navigator.standalone;
-  if (isIOS && !isStandalone) {
+  if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.navigator.standalone)
     document.getElementById('install-banner').style.display = 'block';
-  }
 }
 
 // ══════════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════════
 loadSettings();
+renderBookmakers();
+updateBkSummary();
 loadHistory();
 checkInstallable();
 </script>
